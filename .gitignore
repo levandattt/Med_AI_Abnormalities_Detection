@@ -1,0 +1,4 @@
+/src/dicom_files/
+/src/model/Faster_RCNN_R_50/model/model_final.pth
+/.venv/
+/.idea
