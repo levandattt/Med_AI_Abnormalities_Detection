@@ -12,7 +12,7 @@ def dicom_to_base64(dicom):
     image = Image.fromarray(pixel_array_normalized)
 
     image_bytes = io.BytesIO()
-    image.save(image_bytes, format="PNG")
+    image.save(image_bytes, format="JPEG")
     image_bytes.seek(0)
 
     image_base64 = base64.b64encode(image_bytes.getvalue()).decode("utf-8")

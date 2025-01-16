@@ -9,6 +9,7 @@ c_find_default_params ={
         "StudyDate": "",
         "StudyTime":"",
         "SOPClassUID": "",
+        "ContentDescription":""
     },
     "SERIES": {
         "PatientID": "",
@@ -22,6 +23,7 @@ c_find_default_params ={
         "SeriesDescription": "",
         "SeriesDate": "",
         "SeriesTime": "",
+        "ContentDescription": ""
     },
     "IMAGE": []
 }

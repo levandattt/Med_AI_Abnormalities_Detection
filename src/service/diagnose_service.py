@@ -1,16 +1,15 @@
 import time
 from typing import Optional
-from pydicom import Dataset, dcmread
+from pydicom import Dataset, dcmread, DataElement
 from pydicom.uid import generate_uid
 from matplotlib import pyplot as plt
+
 from src.constraint.Enum.ModelName import ModelName
-from src.constraint.Enum.QueryRetrieveLevel import QueryRetrieveLevel
 from src.constraint.default import c_find_default_params
 from src.service.pacs_service import PacsService
 from src.model.Faster_RCNN_R_50 import faster_rcnn_r50
-from src.settings import ROOTDIR
 import copy
-
+from src.constraint.dicom_custom_tag import ai_tag, ai_predict_date_tag, ai_predict_time_tag
 
 def diagnose(patient_id: str, study_uid: str, series_uid: str, model:Optional[str]=ModelName.FASTER_RCNN_R50) -> Optional[Dataset]:
         pacs_service = PacsService()
@@ -44,6 +43,8 @@ def diagnose(patient_id: str, study_uid: str, series_uid: str, model:Optional[st
             result.SeriesInstanceUID = generate_uid()
             result.SOPInstanceUID = generate_uid()
             result.SeriesDescription = "Predicted"
+            result.SeriesDate = time.strftime("%Y%m%d")
+            result.SeriesTime = time.strftime("%H%M%S")
 
             pacs_service.store_dcm(result)
             # result.save_as(f"{ROOTDIR}/src/dicom_files/predict_result/{result.SeriesInstanceUID}_{time.time()}.dcm")

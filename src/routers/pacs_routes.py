@@ -26,6 +26,12 @@ async def get_series(patientId: str, studyInstanceUID: str, seriesInstanceUID: s
     print("get_series", patientId, studyInstanceUID, seriesInstanceUID)
     return await pacs_controller.get_series(patientId, studyInstanceUID, seriesInstanceUID)
 
+@router.get("/api/v1/studies/series/jpeg")
+async def get_series(patientID: str, studyInstanceUID: str, seriesInstanceUID: str):
+    print("get_series", patientID, studyInstanceUID, seriesInstanceUID)
+    return await pacs_controller.get_series_jpeg(patientID, studyInstanceUID, seriesInstanceUID)
+
+
 @router.get("/api/v1/studies/{study_uid}")
 async def get_study(study_uid: str):
     return await pacs_controller.get_study(study_uid)

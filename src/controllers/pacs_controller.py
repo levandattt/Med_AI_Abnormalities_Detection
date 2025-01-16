@@ -1,8 +1,11 @@
 from datetime import datetime
 
-from pydicom import dcmread
+from pydicom import dcmread, DataElement
 from pydicom.uid import generate_uid
 import time
+import numpy as np
+from PIL import Image
+from src.utils.image_convert import dicom_to_base64
 
 from src.constraint.Enum.QueryRetrieveLevel import QueryRetrieveLevel as QueryRetrieveLevelENUM
 from src.constraint.default import c_find_default_params
@@ -152,3 +155,18 @@ async def get_series(patientId: str, studyUID: str, seriesUID: str):
             "Content-Disposition": f"attachment; filename={seriesUID}.dcm"
         }
     )
+
+
+async def get_series_jpeg(patientId: str, studyUID: str, seriesUID: str):
+    pacs_service = PacsService()
+    dicom_data = pacs_service.get_dicom(patientId, studyUID, seriesUID)
+    dicom1_base64 = dicom_to_base64(dicom_data)
+    return {
+        "status": "success",
+        "data": {
+            "image":"data:image/jpeg;base64,"+dicom1_base64
+        },
+        "message": "Retrieved successfully"
+    }
+
+

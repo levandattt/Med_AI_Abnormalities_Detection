@@ -3,6 +3,7 @@ from pydicom.uid import DigitalXRayImageStorageForProcessing, DigitalXRayImageSt
 from pynetdicom import AE, debug_logger, evt, build_role
 from io import BytesIO
 import zipfile
+from pydicom.tag import Tag
 
 from src.settings import PACS, DEBUG
 from src.constraint.uid import PatientStudyOnlyQueryRetrieveInformationModelFind, \
@@ -75,7 +76,6 @@ class PacsService:
         ae = AE()
         ae.add_requested_context(PatientStudyOnlyQueryRetrieveInformationModelFind)
         assoc = ae.associate(PACS.get('server'), PACS.get('port'), ae_title=PACS.get('ae_title'))
-
         if assoc.is_established:
             # Send the C-FIND request
             responses = assoc.send_c_find(ds, PatientStudyOnlyQueryRetrieveInformationModelFind)
@@ -87,8 +87,9 @@ class PacsService:
                     #     print('C-FIND query status: 0x{0:04X}'.format(status.Status))
                     #     print('-------------------------------------')
                     #     print(identifier)
-                    if status.Status in (0xFF00, 0xFF01):
+                    if identifier:
                         result = {}
+                        print(identifier)
                         for tag, element in identifier.items():
                             result[element.keyword] = element.value
                         results.append(result)
